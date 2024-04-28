@@ -8,10 +8,10 @@ import ListPage from "./pages/ListPage";
 // import ChatBot from "./components/ChatBot";
 
 function App() {
+
   return (
     <div className="w-96 h-svh m-auto border">
       <Header />
-      <div></div>
       {/* <ChatBot /> */}
 
       <Routes>
