@@ -7,7 +7,7 @@ export const theme = {
   extend: {
     //예시
     colors: {
-      'regal-blue': '#243c5a',
+      'main-color': '#FBE6E6',
     },
   }
 };
