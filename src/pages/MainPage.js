@@ -1,7 +1,16 @@
+import DetailComponent from "../components/Detail";
+import Map from "../components/Map";
+import Weather from "../components/Weather";
+
+
 function MainPage() {
   return (
-    <div>
-      <h1>Main Page</h1>
+    <div className="HomePage">
+      <Weather />
+      <div className="px-3">
+        <Map />
+        <DetailComponent />
+      </div>
     </div>
   );
 }
