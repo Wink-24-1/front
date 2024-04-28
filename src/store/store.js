@@ -1,18 +1,22 @@
-import {configureStore, createSlice} from '@reduxjs/toolkit';
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 let menuState = createSlice({
-    menu: "menu",
-    initialState: {menu: "home"},
-    reducers:{
-        changeMenu: (state, action) => {
-            state.menu = "list";
-        }
-    }
-    });
+  name: "menuState",
+  initialState: { menu: "home" },
+  reducers: {
+    changeMenuToList: (state) => {
+      state.menu = "list";
+    },
+    changeMenuToHome: (state) => {
+        state.menu = "home";
+      },
+  },
+});
 
-    export let {changeMenu} = menuState.actions;
-    export const store = configureStore({
-        reducer: {
-            menuState: menuState.reducer
-        }
-    });
+export let { changeMenuToList, changeMenuToHome } = menuState.actions;
+
+export default configureStore({
+  reducer: {
+    menuState: menuState.reducer,
+  },
+});
