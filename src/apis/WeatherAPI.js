@@ -30,6 +30,22 @@ function getBaseTime() {
   return `${hours.toString().padStart(2, "0")}${minutes}`;
 }
 
+function getClosestFcstTime(data) {
+  const currentTime = getBaseTime();
+  let closestTimeDiff = Infinity;
+  let closestFcstTime = null;
+
+  data.forEach((item) => {
+    const timeDiff = Math.abs(Number(item.fcstTime) - Number(currentTime));
+    if (timeDiff < closestTimeDiff) {
+      closestTimeDiff = timeDiff;
+      closestFcstTime = item.fcstTime;
+    }
+  });
+
+  return closestFcstTime;
+}
+
 function getLocation() {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -45,8 +61,21 @@ function getLocation() {
   });
 }
 
+// 사용할 카테고리 리스트
+const usedCategories = ["PTY", "SKY", "T1H"]; // 여기에 사용할 카테고리를 추가하십시오.
+
+// 카테고리별로 데이터를 담을 객체 생성
+const categoryData = {
+  PTY: [],
+  SKY: [],
+  T1H: [],
+};
 async function getWeather() {
-  
+  const returnData = {
+    PTY: [],
+    SKY: [],
+    T1H: [],
+  };
   try {
     const date = getDate();
     const time = getBaseTime();
@@ -67,13 +96,27 @@ async function getWeather() {
         },
       }
     );
-    console.log('Weather.data.통신.성공적')
-    console.log(response.data.response.body.items.item)
+    console.log("Weather.data.통신.성공적");
+    const responseData = response.data.response.body.items.item;
 
-    const filteredData = response.data.response.body.items.item.filter(item => item.category === 'SKY');
+    // response에서 각 항목을 카테고리에 따라 분류하여 저장
+    responseData.forEach((item) => {
+      const category = item.category;
+      if (usedCategories.includes(category)) {
+        categoryData[category].push(item);
+      }
+    });
 
-    return filteredData[0];
+    console.log(categoryData.PTY[0]);
+    console.log(categoryData.SKY[0]);
+    console.log(categoryData.T1H[0]);
+    returnData.PTY = categoryData.PTY[0];
+    returnData.SKY = categoryData.SKY[0];
+    returnData.T1H = categoryData.T1H[0];
 
+    return returnData;
+
+    //     return filteredData[0];
   } catch (error) {
     console.error(error);
     throw new Error("Weather data에서 문제가 생겼습니다");
