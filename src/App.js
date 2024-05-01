@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
-// import ChatBot from "./components/ChatBot";
 
 function App() {
 
