@@ -7,9 +7,9 @@ import { changeMenuToHome } from "../store/store";
 
 function MainPage() {
   let dispatch = useDispatch();
-  
+
   useEffect(() => {
-    dispatch(changeMenuToHome())
+    dispatch(changeMenuToHome());
   }, []);
 
   return (
