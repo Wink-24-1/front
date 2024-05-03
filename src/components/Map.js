@@ -1,6 +1,8 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 const { kakao } = window;
+
 function Map() {
   let [recommend, setRecommend] = useState([
     "🚘 주차장",
