@@ -10,10 +10,10 @@ async function sendRequest(method, url, data) {
       response = await axios.get(url, { params: data });
     } else if (method === "POST") {
       response = await axios.post(url, data);
-    } else if (method === "PUT") {
-      response = await axios.post(url, data);
+    } else if (method === "FETCH") {
+      response = await axios.fetch(url, data);
     } else if (method === "DELETE") {
-      response = await axios.post(url, data);
+      response = await axios.delete(url, data);
     } else {
       throw new Error("HTTP Method Error");
     }
@@ -35,7 +35,7 @@ async function PWCheckAPI(state, commentID, password) {
         password: password,
       });
     } else if (state === 0) {
-      response = await sendRequest("PUT", REACT_APP_MAIN_URL + "/comment", {
+      response = await sendRequest("FETCH", REACT_APP_MAIN_URL + "/comment", {
         commentID: commentID,
         password: password,
       });
@@ -49,4 +49,5 @@ async function PWCheckAPI(state, commentID, password) {
     throw error;
   }
 }
+
 export default PWCheckAPI;
