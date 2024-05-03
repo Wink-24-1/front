@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
+import PwModal from "./components/PwModal";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/123" element={<PwModal state={1}/>} />
 
         <Route path="/list" element={<ListPage />} />
 

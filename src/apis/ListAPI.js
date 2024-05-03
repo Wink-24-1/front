@@ -1,5 +1,23 @@
 import axios from "axios";
 
+const responseEx = [
+  {
+    title: "클래식연주회",
+    url: "http://cyblog.fly.dev",
+    category: 1,
+  },
+  {
+    title: "가수단콘",
+    url: "http://cyblog.fly.dev",
+    category: 2,
+  },
+  {
+    title: "팝업스토어",
+    url: "http://cyblog.fly.dev",
+    category: 3,
+  },
+];
+
 async function getList() {
   try {
     // const response = await axios.get(`http://localhost:8080/list`, {
@@ -10,23 +28,7 @@ async function getList() {
     // });
     // return response;
 
-    const responseEx = [
-      {
-        title: "클래식연주회",
-        url: "http://cyblog.fly.dev",
-        category: 1,
-      },
-      {
-        title: "가수단콘",
-        url: "http://cyblog.fly.dev",
-        category: 2,
-      },
-      {
-        title: "팝업스토어",
-        url: "http://cyblog.fly.dev",
-        category: 3,
-      },
-    ];
+    
     return responseEx;
   } catch (error) {
     console.error(error);

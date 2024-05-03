@@ -10,9 +10,9 @@ import {
 
 function Weather() {
   let [weatherData, setWeatherData] = useState({
-    PTY: '',
-    SKY: '',
-    T1H: {fcstValue: '00'},
+    PTY: "",
+    SKY: "",
+    T1H: { fcstValue: "00" },
   });
 
   useEffect(() => {
@@ -40,7 +40,9 @@ function Weather() {
                 }
               })()}
             </div>
-            <div className="font-bold text-xl place-content-center">{weatherData.T1H.fcstValue}°C</div>
+            <div className="font-bold text-xl place-content-center">
+              {weatherData.T1H.fcstValue}°C
+            </div>
           </div>
           <div className="w-16 h-12 text-right font-semibold">
             <h2>
