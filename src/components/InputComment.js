@@ -1,13 +1,16 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentButtonImg from "../images/CommentButton.svg";
+import CommentDesign from "./CommentDesign";
 
 const InputComment = () => {
-  const [name, setName] = useState("");
+  const TodayDate = new Date();
+  const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
+  const [nickname, setNickname] = useState("");
   const [pw, setPw] = useState("");
   const [comment, setComment] = useState("");
   const onChangeNameInput = (e) => {
-    setName(e.target.value);
+    setNickname(e.target.value);
   };
   const onChangePwInput = (e) => {
     setPw(e.target.value);
@@ -15,31 +18,101 @@ const InputComment = () => {
   const onChangeComment = (e) => {
     setComment(e.target.value);
   };
+  const [commentList, setCommentList] = useState([]);
+  //댓글 추가
+  const addComment = () => {
+    //이름, 비번, 내용 다 비어있지 않았을 때 실행 가능하도록
+    if (nickname !== "" && pw !== "" && comment !== "") {
+      if (commentList.length > 0) {
+        console.log("commentList : ", commentList);
+        const lastCmtIndex = commentList.length - 1;
+        const addedCmtId = commentList[lastCmtIndex].id + 1;
+        const newComment = {
+          id: addedCmtId,
+          username: nickname,
+          password: pw,
+          content: comment,
+          date: TodayDate.toLocaleDateString(),
+        };
+        setCommentList([...commentList, newComment]);
+      } else {
+        const newComment = {
+          id: 1,
+          username: nickname,
+          password: pw,
+          content: comment,
+          date: TodayDate.toLocaleDateString(),
+        };
+        setCommentList([newComment]);
+      }
+      setComment("");
+      setNickname("");
+      setPw("");
+    } else {
+      alert("댓글을 마저 작성해주세요");
+    }
+  };
+  useEffect(() => {
+    console.log("commentList : ", commentList);
+  }, [commentList]);
+
+  //댓글 삭제
+  const deleteComment = (id) => {
+    setCommentList(commentList.filter((comment) => comment.id !== id));
+  };
+
+  //댓글 수정
+  const editComment = (commentId, editValue) => {
+    let newCommentList = commentList.map((item) => {
+      if (item.id === commentId) {
+        item.content = editValue;
+      }
+      return item;
+    });
+    setCommentList(newCommentList);
+  };
 
   return (
     <Container>
+      {commentList.map((comment) => {
+        const commentId = comment.id;
+        console.log("commentId : ", commentId);
+        console.log("typeof(commentId) : ", typeof commentId);
+        return (
+          <CommentDesign
+            key={commentId}
+            comment={comment}
+            date={TodayDate.toLocaleDateString()}
+            deleteComment={deleteComment}
+            isEditing={selectedCommentIndex === commentId ? true : false}
+            setSelectedCommentIndex={setSelectedCommentIndex}
+            editComment={editComment}
+          />
+        );
+      })}
       <UserInfoWrapper>
         <UserInfoInput
-          value={name}
+          value={nickname}
           onChange={onChangeNameInput}
-          placeholder="이름"
+          placeholder="닉네임"
         />
         <UserInfoInput
           value={pw}
           onChange={onChangePwInput}
           placeholder="비밀번호"
+          type="password"
         />
       </UserInfoWrapper>
-      <CommentWrapper>
+      <CommentInputWrapper>
         <CommentInput
           value={comment}
           onChange={onChangeComment}
           placeholder="댓글을 입력해주세요"
         />
-        <CommentButton>
+        <CommentButton onClick={addComment}>
           <img src={CommentButtonImg} alt="댓글 버튼" />
         </CommentButton>
-      </CommentWrapper>
+      </CommentInputWrapper>
     </Container>
   );
 };
@@ -63,7 +136,7 @@ const UserInfoInput = styled.input`
   padding: 5px;
 `;
 
-const CommentWrapper = styled.div`
+const CommentInputWrapper = styled.div`
   position: relative;
 `;
 

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ClassicImg from "../images/Image.svg";
 import LinkImg from "../images/Home.svg";
-import Comment from "../components/Comment";
 import InputComment from "../components/InputComment";
 
 const DetailPage = () => {
@@ -41,7 +40,6 @@ const DetailPage = () => {
         가격 : {price} <br />
         대상 : {target}
       </DetailInfo>
-      <Comment />
       <InputComment />
     </DetailContainer>
   );
@@ -54,7 +52,8 @@ const DetailContainer = styled.div`
 
 const DetailWrapper = styled.div`
   display: flex;
-  padding: 27px;
+  padding: 0px 27px;
+  margin-top: 18px;
   gap: 25px;
   justify-content: space-between;
 `;
@@ -84,7 +83,7 @@ const DetailInfo = styled.div`
   border-radius: 8px;
   background: #fbe6e6;
   flex-shrink: 0;
-  margin: 0px 27px;
+  margin: 20px 27px;
   padding: 13px;
 `;
 
