@@ -30,6 +30,22 @@ function getBaseTime() {
   return `${hours.toString().padStart(2, "0")}${minutes}`;
 }
 
+function getClosestFcstTime(data) {
+  const currentTime = getBaseTime();
+  let closestTimeDiff = Infinity;
+  let closestFcstTime = null;
+
+  data.forEach((item) => {
+    const timeDiff = Math.abs(Number(item.fcstTime) - Number(currentTime));
+    if (timeDiff < closestTimeDiff) {
+      closestTimeDiff = timeDiff;
+      closestFcstTime = item.fcstTime;
+    }
+  });
+
+  return closestFcstTime;
+}
+
 function getLocation() {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -99,6 +115,7 @@ async function getWeather() {
     returnData.T1H = categoryData.T1H[0];
 
     return returnData;
+
   } catch (error) {
     console.error(error);
     throw new Error("Weather data에서 문제가 생겼습니다");

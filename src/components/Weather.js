@@ -14,6 +14,7 @@ function Weather({ recommendData, weatherGPS }) {
     PTY: "",
     SKY: "",
     T1H: { fcstValue: "00" },
+
   });
 
   useEffect(() => {
