@@ -7,22 +7,39 @@ import {
   faCloudSun,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { getWeather2 } from "../apis/WeatherAPI2";
 
-function Weather() {
+function Weather({ recommendData, weatherGPS }) {
   let [weatherData, setWeatherData] = useState({
-    PTY: '',
-    SKY: '',
-    T1H: {fcstValue: '00'},
+    PTY: "",
+    SKY: "",
+    T1H: { fcstValue: "00" },
+
   });
 
   useEffect(() => {
-    getWeather().then((data) => {
-      setWeatherData(data);
-    });
-  }, []);
+    if (recommendData === undefined) {
+      getWeather().then((data) => {
+        setWeatherData(data);
+        console.log(data);
+      });
+    } else {
+      console.log(weatherGPS);
+      getWeather2(parseInt(weatherGPS.latitude), parseInt(weatherGPS.longitude)).then(
+        (data) => {
+          setWeatherData(data);
+        }
+      );
+    }
+  }, [recommendData]);
 
   return (
-    <div className="px-10 py-5 min-h-20 border-b place-content-center">
+    <div className="px-10 py-4 min-h-20 border-b place-content-center">
+      {recommendData ? (
+        <h1 className="pb-3 font-bold">{recommendData.title}</h1>
+      ) : (
+        <h1 className="pb-3 font-bold">현재 위치의 날씨입니다.</h1>
+      )}
       {weatherData ? (
         <div className="flex gap-5 justify-between">
           <div className="flex gap-3">
@@ -40,7 +57,9 @@ function Weather() {
                 }
               })()}
             </div>
-            <div className="font-bold text-xl place-content-center">{weatherData.T1H.fcstValue}°C</div>
+            <div className="font-bold text-xl place-content-center">
+              {weatherData.T1H.fcstValue}°C
+            </div>
           </div>
           <div className="w-16 h-12 text-right font-semibold">
             <h2>

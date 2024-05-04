@@ -4,7 +4,7 @@ import Loading from "./Loading";
 
 const { kakao } = window;
 
-function Map({ setRecommendData, contentGPS, setWeatherGPS }) {
+function ContentsMap({ setRecommendData, contentGPS, setWeatherGPS }) {
   let [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -23,18 +23,11 @@ function Map({ setRecommendData, contentGPS, setWeatherGPS }) {
 }
 
 //모바일로 접속 시 따로 설정해줘야되나봄~ 아직 안함
-function KakaoMap({
-  setRecommendData,
-  contentGPS,
-  isLoading,
-  setIsLoading,
-  setWeatherGPS,
-}) {
+function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading, setWeatherGPS }) {
   let [centerGPS, setCenterGPS] = useState({
     latitude: 37.6100021,
     longitude: 126.9971053,
   });
-
   function changeCenterGPS(lat, lng) {
     setCenterGPS((prevState) => ({
       ...prevState,
@@ -47,7 +40,7 @@ function KakaoMap({
     });
   }
 
-  function printParkingPins(map) {
+  function printPins(map) {
     contentGPS?.forEach((data) => {
       // 마커 생성
       const marker = new kakao.maps.Marker({
@@ -56,11 +49,11 @@ function KakaoMap({
         //마커가 표시 될 위치
         position: new kakao.maps.LatLng(data.latitude, data.longitude),
         //마커에 hover시 나타날 title
-        title: data.name,
+        title: data.title,
       });
 
       var infowindow = new kakao.maps.InfoWindow({
-        content: data.name, // 인포윈도우에 표시할 내용
+        content: data.title, // 인포윈도우에 표시할 내용
       });
 
       // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
@@ -91,12 +84,18 @@ function KakaoMap({
         infowindow.close();
       };
     }
+    //Detail 컴포넌트에 들어갈 데이터를 설정해주는 함수
     function setRecommendDataListener(data) {
       setRecommendData((prevState) => ({
         ...prevState,
-        title: data.name,
-        date: data.rule,
-        place: data.address,
+        id: data.id,
+        category: data.category,
+        image: data.image,
+        title: data.title,
+        start: data.start,
+        end: data.end,
+        place: data.place,
+        url: data.url,
       }));
       changeCenterGPS(data.latitude, data.longitude);
     }
@@ -110,7 +109,6 @@ function KakaoMap({
   }, []);
 
   useEffect(() => {
-    console.log(contentGPS);
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(centerGPS.latitude, centerGPS.longitude), //지도의 중심 좌표
@@ -118,17 +116,17 @@ function KakaoMap({
     };
 
     const map = new kakao.maps.Map(container, options);
-    printParkingPins(map);
-  }, [printParkingPins, contentGPS]);
+    printPins(map);
+  }, [printPins, contentGPS]);
 
   return (
     <div>
-      <div className="relative" style={{ width: "360px", height: "320px"}}>
+      <div className="relative" style={{ width: "360px", height: "320px" }}>
         {isLoading && <Loading />}
-        <div id="map" className="w-full h-full z-10"></div>
+        <div id="map" className="w-full h-full"></div>
       </div>
     </div>
   );
 }
 
-export default Map;
+export default ContentsMap;

@@ -5,19 +5,22 @@ import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
-// import ChatBot from "./components/ChatBot";
-
+import DetailPage from "./pages/DetailPage";
+import CategoryListPage from "./pages/CategoryListPage";
+import ChatBot from "./components/ChatBot";
 function App() {
-
   return (
-    <div className="w-96 m-auto border pb-3">
+    <div className="w-96 m-auto border pb-3 min-h-screen">
       <Header />
-      {/* <ChatBot /> */}
+      <ChatBot />
 
       <Routes>
         <Route path="/" element={<MainPage />} />
-
+        <Route path="/:category/:id" element={<MainPage />} />
         <Route path="/list" element={<ListPage />} />
+        <Route path="/list/:categoryName" element={<CategoryListPage />} />
+
+        <Route path="/detail/:id" element={<DetailPage />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
