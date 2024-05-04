@@ -3,58 +3,25 @@ import styled from "styled-components";
 import Trash from "../images/delete.svg";
 import Modify from "../images/modify.svg";
 import Like from "../images/LikeButton.svg";
-// import DeleteModal from "../components/PwModal";
+import axios from "axios";
+import DeleteModal from "../components/PwModal";
 
-const CommmentDesign = ({ id, username, comment, date }) => {
-  const onChangeEditValue = (e) => {
-    setEditValue(e.target.value);
+const CommmentDesign = ({ commentId, username, comment, date }) => {
+  const [pw, setPw] = useState("1111");
+  const [showModal, setShowModal] = useState(false);
+  const onChangePwInput = (e) => {
+    setPw(e.target.value);
   };
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const onCloseDeleteModal = () => {
-    setShowDeleteModal(false);
+  const handleDeleteClick = () => {
+    setShowModal(true); // 모달 보이도록 설정
   };
-  const onClickDeleteButton = () => {
-    console.log("id : ", id);
-    // deleteComment(id);
-    setShowDeleteModal(true);
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
-  const [editValue, setEditValue] = useState(comment);
-  const handleEditInput = () => {
-    // editComment(id, editValue);
-    // setSelectedCommentIndex(0); //선택된 댓글의 인덱스 초기화
-  };
-  const handleClick = () => {
-    if (1) {
-      handleEditInput();
-    } else {
-      // setSelectedCommentIndex(id);
-    }
-  };
-  //수정 버튼 눌렀을 때 새로 수정할 내용 입력할 창이 뜨도록
-  const editInput = (
-    <input type="text" value={editValue} onChange={onChangeEditValue} /> //JSX 요소 담고 있는 변수
-  );
-  console.log("id : ", id);
   console.log("username : ", username);
   console.log("comment : ", comment);
   console.log("date", date);
-  // console.log("isEditing", isEditing);
-  //댓글 삭제
-  // const deleteComment = (id) => {
-  //   setCommentList(commentList.filter((comment) => comment.id !== id));
-  // };
 
-  // //댓글 수정
-  // const editComment = (commentId, editValue) => {
-  //   let newCommentList = commentList.map((item) => {
-  //     if (item.id === commentId) {
-  //       item.comment = editValue;
-  //     }
-  //     return item;
-  //   });
-  //   setCommentList(newCommentList);
-  // };
   return (
     <Container>
       <LikeButton />
@@ -67,25 +34,29 @@ const CommmentDesign = ({ id, username, comment, date }) => {
         </RowContainer>
         {comment}
         <RowContainer>
-          {/* {showDeleteModal && (
-            <DeleteModal
-              state={1}
-              commentID={id}
-              onClose={onCloseDeleteModal}
-            />
-          )} */}
-          <ClickButton onClick={() => onClickDeleteButton(id)}>
-            {/* <ClickButton onClick={onClickDeleteButton}> */}
+          <ClickButton
+            onChange={onChangePwInput}
+            onClick={handleDeleteClick}
+            // onClick={() => DeleteData(id)}
+          >
             <img src={Trash} />
             <Text>삭제</Text>
-          </ClickButton>
-          {/* 수정 가능한 input 창 표시 & 선택된 댓글의 인덱스 설정 */}
-          <ClickButton onClick={handleClick}>
+            {/* 수정 가능한 input 창 표시 & 선택된 댓글의 인덱스 설정 */}
+            {/* <ClickButton onClick={handleClick}>
             <img src={Modify} />
-            <Text>수정</Text>
+        <Text>수정</Text> */}
           </ClickButton>
         </RowContainer>
       </CommentContainer>
+      <ModalContainer>
+        {showModal && (
+          <DeleteModal
+            state={1}
+            commentId={commentId}
+            setShowModal={setShowModal} // 모달 닫기 함수 전달
+          />
+        )}
+      </ModalContainer>
     </Container>
   );
 };
@@ -139,6 +110,13 @@ const LikeButton = styled.button`
 const ClickButton = styled.div`
   display: flex;
   cursor: pointer;
+`;
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 `;
 
 export default CommmentDesign;

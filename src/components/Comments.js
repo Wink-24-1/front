@@ -7,8 +7,6 @@ import InputComment from "../components/InputComment";
 import axios from "axios";
 
 const Comments = () => {
-  //   const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
-
   const [commentList, setCommentList] = useState([]);
   const { id } = useParams();
 
@@ -21,7 +19,6 @@ const Comments = () => {
     return response.data;
   }
 
-  //댓글 추가
   useEffect(() => {
     getData();
     console.log(commentList);
@@ -32,10 +29,10 @@ const Comments = () => {
       {commentList?.map((comment) => {
         return (
           <CommentDesign
-            id={comment.id}
+            commentId={comment.id}
             username={comment.name}
             comment={comment.content}
-            date={comment.createdAt}
+            date={new Date(comment.createdAt).toLocaleDateString()}
           />
         );
       })}
@@ -45,7 +42,6 @@ const Comments = () => {
 };
 
 const Container = styled.div`
-  height: 125px;
   width: 330px;
   margin: auto;
 `;

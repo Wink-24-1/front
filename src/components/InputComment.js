@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentButtonImg from "../images/CommentButton.svg";
 import sendRequest from "../apis/CommentAPI";
+import { AxiosError } from "axios";
 
 const InputComment = ({ commentList, setCommentList }) => {
   const TodayDate = new Date();
@@ -30,13 +31,17 @@ const InputComment = ({ commentList, setCommentList }) => {
           password: pw,
           content: comment,
         }
-      ).then((response) => {
-        // 성공적으로 POST 요청이 완료되었을 때 페이지를 새로고침
-        window.location.reload();
-      });
+      );
+      // 성공적으로 POST 요청이 완료되었을 때 페이지를 새로고침
+      window.location.reload();
       return response;
     } catch (error) {
-      console.error("Error adding comment:", error);
+      //수혁이가 해줌 짱 멋있다! 욕설 댓글 입력하면 error 띄우기
+      if (error instanceof AxiosError) {
+        alert(error.response?.data);
+      } else {
+        alert("Error!", error);
+      }
     }
   }
 
@@ -79,7 +84,6 @@ const InputComment = ({ commentList, setCommentList }) => {
 };
 
 const Container = styled.div`
-  height: 125px;
   width: 330px;
   margin: auto;
 `;
