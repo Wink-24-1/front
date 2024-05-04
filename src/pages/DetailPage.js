@@ -1,18 +1,11 @@
 import DetailHeader from "../components/DetailHeader";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ClassicImg from "../images/Image.svg";
 import LinkImg from "../images/Home.svg";
 import InputComment from "../components/InputComment";
 import axios from "axios";
 
 const DetailPage = () => {
-  const [img, setImg] = useState(ClassicImg);
-
-  const [link, setLink] = useState(
-    "https://illustrationkorea.co.kr/at/media/ill-gallery/"
-  );
-
   async function getData() {
     const response = await axios.get(
       `https://seoulmate.kookm.in/api/event/140577`
@@ -26,7 +19,6 @@ const DetailPage = () => {
 
   useEffect(() => {
     getData();
-    setLink(data.url);
     console.log(data);
   }, []);
 
@@ -51,7 +43,7 @@ const DetailPage = () => {
         시작일 : {data.start} <br />
         마감일 : {data.end} <br />
         장소 : {data.place} <br />
-        가격 : {data.price ? data.price : "무료입니다"} <br />
+        가격 : {data.price ? data.price : "무료"} <br />
         대상 : {data.target}
       </DetailInfo>
       <InputComment />

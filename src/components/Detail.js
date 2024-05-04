@@ -1,24 +1,45 @@
+import { Link } from "react-router-dom";
 import ssimage from "../images/logo512.png";
 
-function DetailComponent() {
+function DetailComponent({ recommendData }) {
   return (
     <div className="border rounded-lg bg-main-color min-h-40 p-3">
-      <div className="flex">
+      <div className="flex mb-2">
         <img
-          src={ssimage}
-          alt="'~~'의 예시 사진"
+          src={recommendData.image ? recommendData.image : ssimage}
+          alt={`${recommendData.title} 사진`}
           className="w-4/12 h-24 rounded-xl"
+          onClick={() => {
+            console.log(recommendData);
+          }}
         ></img>
         <div className="w-8/12 px-3">
-          <div className="font-bold">전시제목</div>
-          <div className="text-sm">전시날짜</div>
-          <div className="text-sm">전시장소</div>
+          <Link
+            to={`/${recommendData.category}/${recommendData.id}`}
+            className="font-bold"
+            onClick={() => {
+              console.log(recommendData);
+            }}
+          >
+            {recommendData.title ? recommendData.title : "잠시만 기다려주세요"}
+          </Link>
+          <div className="text-sm">
+            {recommendData.start
+              ? `${recommendData.start} ~ ${recommendData.end}`
+              : "잠시만 기다려주세요"}
+          </div>
+          <div className="text-sm">
+            {recommendData.place ? recommendData.place : "Loading..."}
+          </div>
         </div>
       </div>
-      <div className="max-h-11 truncate">
-        전시 간략
-        설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-      </div>
+      <Link
+        className="max-h-11 max-w-96  mt-7 truncate ellipsis"
+        to={`${recommendData.category}/${recommendData.id}`}
+        target="_blank"
+      >
+        {"상세정보 보기"}
+      </Link>
     </div>
   );
 }

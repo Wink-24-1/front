@@ -15,7 +15,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<MainPage />} />
-
+        <Route path="/:category/:id" element={<MainPage />} />
         <Route path="/list" element={<ListPage />} />
 
         <Route path="*" element={<NotFound />} />

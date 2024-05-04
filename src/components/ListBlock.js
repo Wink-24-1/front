@@ -1,6 +1,7 @@
 import { faSlack } from "@fortawesome/free-brands-svg-icons";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 function ListBlock({ category, url, title }) {
   let icon;
@@ -19,13 +20,13 @@ function ListBlock({ category, url, title }) {
   console.log(category);
 
   return (
-    <a
+    <Link
       className="min-w-40 h-40 p-3 bg-main-color place-content-center text-center gap-9"
-      href={url}
+      to={`/주차장/ㅇㅁㄴㅇ`}
     >
       <div>{icon}</div>
       <div className="font-semibold mt-3">{title}</div>
-    </a>
+    </Link>
   );
 }
 

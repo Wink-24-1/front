@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import getParking, { getMAPLocation } from "../apis/MapAPI";
 import Loading from "./Loading";
+import ListAPI from "../apis/ListAPI";
 
 const { kakao } = window;
 
-function Map({ setRecommendData, contentGPS }) {
+function ContentsMap({ setRecommendData, contentGPS }) {
   let [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -35,20 +36,25 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
     }));
   }
 
-  function printParkingPins(map) {
+  function printPins(map) {
     contentGPS?.forEach((data) => {
       // 마커 생성
       const marker = new kakao.maps.Marker({
         //마커가 표시 될 지도
         map: map,
         //마커가 표시 될 위치
-        position: new kakao.maps.LatLng(data.latitude, data.longitude),
+        //❗️❗️❗️❗️❗️❗️❗️
+        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+        //나중에 수정해주면 바꾸기❗️❗️❗️❗️
+        position: new kakao.maps.LatLng(data.longitude, data.latitude),
         //마커에 hover시 나타날 title
-        title: data.name,
+        title: data.title,
       });
 
       var infowindow = new kakao.maps.InfoWindow({
-        content: data.name, // 인포윈도우에 표시할 내용
+        content: data.title, // 인포윈도우에 표시할 내용
       });
 
       // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
@@ -79,14 +85,25 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
         infowindow.close();
       };
     }
+    //Detail 컴포넌트에 들어갈 데이터를 설정해주는 함수
     function setRecommendDataListener(data) {
       setRecommendData((prevState) => ({
         ...prevState,
-        title: data.name,
-        date: data.rule,
-        place: data.address,
+        id: data.id,
+        category: data.category,
+        image: data.image,
+        title: data.title,
+        start: data.start,
+        end: data.end,
+        place: data.place,
+        url: data.url,
       }));
-      changeCenterGPS(data.latitude, data.longitude);
+      //❗️❗️❗️❗️❗️❗️❗️
+      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
+      //나중에 수정해주면 바꾸기❗️❗️❗️❗️
+      changeCenterGPS(data.longitude, data.latitude);
     }
   }
   useEffect(() => {
@@ -98,7 +115,6 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
   }, []);
 
   useEffect(() => {
-    console.log(contentGPS);
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(centerGPS.latitude, centerGPS.longitude), //지도의 중심 좌표
@@ -106,8 +122,8 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
     };
 
     const map = new kakao.maps.Map(container, options);
-    printParkingPins(map);
-  }, [printParkingPins, contentGPS]);
+    printPins(map);
+  }, [printPins, contentGPS]);
 
   return (
     <div>
@@ -119,4 +135,4 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
   );
 }
 
-export default Map;
+export default ContentsMap;

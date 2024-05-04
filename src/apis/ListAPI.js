@@ -1,39 +1,35 @@
 import axios from "axios";
 
-const responseEx = [
-  {
-    title: "클래식연주회",
-    url: "http://cyblog.fly.dev",
-    category: 1,
-  },
-  {
-    title: "가수단콘",
-    url: "http://cyblog.fly.dev",
-    category: 2,
-  },
-  {
-    title: "팝업스토어",
-    url: "http://cyblog.fly.dev",
-    category: 3,
-  },
-];
+const REACT_APP_MAIN_URL = process.env.REACT_APP_MAIN_URL;
 
-async function getList() {
+export async function getList() {
   try {
-    // const response = await axios.get(`http://localhost:8080/list`, {
-    //   params: {
-    //     numOfRows: 16,
-    //     pageNo: 1,
-    //   },
-    // });
-    // return response;
-
-    
-    return responseEx;
+    const response = await axios.get(
+      `${REACT_APP_MAIN_URL}/api/event/category`
+    );
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error(error);
-    throw new Error("List data에서 문제가 생겼습니다");
+    throw new Error("List data에서 문제가 생겼습니다 - " + error);
   }
 }
 
-export default getList;
+export async function getContentsList(data) {
+  try {
+    console.log(data);
+    const response = await axios.get(
+      `${REACT_APP_MAIN_URL}/api/event/category/${data}`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("List data에서 문제가 생겼습니다 - " + error);
+  }
+}
+
+export default {
+  getList,
+  getContentsList,
+};
