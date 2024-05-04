@@ -51,7 +51,9 @@ async function getWeather2(latitude, longitude) {
     console.log(latitude, longitude);
 
     const response = await axios.get(
-      `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
+      `${
+        new URL(location.href).protocol
+      }//apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
       {
         params: {
           serviceKey: REACT_APP_GET_WEATHER_KEY,

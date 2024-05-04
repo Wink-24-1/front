@@ -82,7 +82,9 @@ async function getWeather() {
     const { latitude, longitude } = await getLocation();
 
     const response = await axios.get(
-      `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
+      `${
+        new URL(location.href).protocol
+      }//apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
       {
         params: {
           serviceKey: REACT_APP_GET_WEATHER_KEY,
@@ -115,7 +117,6 @@ async function getWeather() {
     returnData.T1H = categoryData.T1H[0];
 
     return returnData;
-
   } catch (error) {
     console.error(error);
     throw new Error("Weather data에서 문제가 생겼습니다");
