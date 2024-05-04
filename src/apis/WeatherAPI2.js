@@ -52,7 +52,7 @@ async function getWeather2(latitude, longitude) {
 
     const response = await axios.get(
       `${
-        new URL(location.href).protocol
+        new URL(window.location.href).protocol
       }//apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
       {
         params: {
