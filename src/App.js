@@ -8,7 +8,6 @@ import ListPage from "./pages/ListPage";
 import PwModal from "./components/PwModal";
 
 function App() {
-
   return (
     <div className="w-96 m-auto border pb-3">
       <Header />
@@ -16,7 +15,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/123" element={<PwModal state={1}/>} />
+        <Route path="/:category/:id" element={<MainPage />} />
+
+        <Route path="/123" element={<PwModal state={1} />} />
 
         <Route path="/list" element={<ListPage />} />
 

@@ -2,23 +2,24 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { changeMenuToList } from "../store/store";
 import ListBlock from "../components/ListBlock";
-import getList from "../apis/ListAPI";
+import ListAPI from "../apis/ListAPI";
 
 function ListPage() {
   let dispatch = useDispatch();
   let [seoulList, setSeoulList] = useState([]);
 
+  const axiosGetList = async () => {
+    try {
+      const result = await ListAPI.getList();
+      setSeoulList(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     dispatch(changeMenuToList());
-    getList()
-      .then((result) => {
-        setSeoulList(result);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    setSeoulList();
-    console.log(getList());
+    axiosGetList();
     console.log(seoulList);
   }, []);
 
@@ -28,9 +29,9 @@ function ListPage() {
         {seoulList?.map((data) => {
           return (
             <ListBlock
-              category={data.category}
-              url={data.url}
-              title={data.title}
+              category={data}
+              url={"https://cyblog.fly.dev/note/105"}
+              title={data}
             />
           );
         })}
