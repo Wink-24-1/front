@@ -3,49 +3,59 @@ import styled from "styled-components";
 import Trash from "../images/delete.svg";
 import Modify from "../images/modify.svg";
 import Like from "../images/LikeButton.svg";
-// import DeleteModal from "../components/PwModal";
+import DeleteModal from "../components/PwModal";
 
-const CommmentDesign = ({
-  comment: { id, username, content, date },
-  isEditing,
-  setSelectedCommentIndex,
-  editComment,
-  deleteComment,
-}) => {
+const CommmentDesign = ({ commentId, username, comment, date }) => {
+  const [pw, setPw] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState(null);
+  const [editValue, setEditValue] = useState("");
+  const onChangePwInput = (e) => {
+    setPw(e.target.value);
+  };
   const onChangeEditValue = (e) => {
     setEditValue(e.target.value);
   };
+  const [isEditing, setIsEditing] = useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const onCloseDeleteModal = () => {
-    setShowDeleteModal(false);
+  const handleEditButtonClick = () => {
+    setIsEditing(true); // 수정 모드로 전환
   };
-  const onClickDeleteButton = () => {
-    console.log("id : ", id);
-    deleteComment(id);
-    setShowDeleteModal(true);
+
+  const handleConfirmEdit = () => {
+    // 수정한 내용을 서버에 전송하는 등의 작업 수행
+    handleClick(0);
+    setIsEditing(false); // 수정 모드 종료
   };
-  const [editValue, setEditValue] = useState(content);
-  const handleEditInput = () => {
-    editComment(id, editValue);
-    setSelectedCommentIndex(0); //선택된 댓글의 인덱스 초기화
-  };
-  const handleClick = () => {
-    if (isEditing) {
-      handleEditInput();
-    } else {
-      setSelectedCommentIndex(id);
-    }
-  };
-  //수정 버튼 눌렀을 때 새로 수정할 내용 입력할 창이 뜨도록
+
   const editInput = (
-    <input type="text" value={editValue} onChange={onChangeEditValue} /> //JSX 요소 담고 있는 변수
+    <div>
+      <input
+        type="text"
+        value={editValue}
+        onChange={onChangeEditValue}
+        style={{
+          border: "0.5px solid",
+        }}
+      />
+      <button
+        onClick={handleConfirmEdit}
+        style={{
+          border: "0.5px solid",
+        }}
+      >
+        확인
+      </button>
+    </div>
   );
-  console.log("id : ", id);
+  const handleClick = (state) => {
+    setShowModal(true); // 모달 보이도록 설정
+    setModalState(state);
+  };
   console.log("username : ", username);
-  console.log("content : ", content);
+  console.log("comment : ", comment);
   console.log("date", date);
-  console.log("isEditing", isEditing);
+
   return (
     <Container>
       <LikeButton />
@@ -56,28 +66,33 @@ const CommmentDesign = ({
           {/*사용자 날짜 띄우기 */}
           <DateText>{date}</DateText>
         </RowContainer>
-        {/*댓글 수정 중인지 파악해서 isEditing 값 true인지 false인지 정함 */}
-        {isEditing ? editInput : content}
+        {isEditing ? editInput : comment}
         <RowContainer>
-          {/* {showDeleteModal && (
-            <DeleteModal
-              state={1}
-              commentID={id}
-              onClose={onCloseDeleteModal}
-            />
-          )} */}
-          <ClickButton onClick={() => onClickDeleteButton(id)}>
-            {/* <ClickButton onClick={onClickDeleteButton}> */}
+          <ClickButton
+            onChange={onChangePwInput}
+            onClick={() => handleClick(1)}
+          >
             <img src={Trash} />
             <Text>삭제</Text>
           </ClickButton>
           {/* 수정 가능한 input 창 표시 & 선택된 댓글의 인덱스 설정 */}
-          <ClickButton onClick={handleClick}>
+          {/* <ClickButton onClick={() => handleClick(0)}> */}
+          <ClickButton onClick={handleEditButtonClick}>
             <img src={Modify} />
             <Text>수정</Text>
           </ClickButton>
         </RowContainer>
       </CommentContainer>
+      <ModalContainer>
+        {showModal && (
+          <DeleteModal
+            editValue={editValue}
+            state={modalState}
+            commentId={commentId}
+            setShowModal={setShowModal} // 모달 닫기 함수 전달
+          />
+        )}
+      </ModalContainer>
     </Container>
   );
 };
@@ -131,6 +146,13 @@ const LikeButton = styled.button`
 const ClickButton = styled.div`
   display: flex;
   cursor: pointer;
+`;
+const ModalContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 `;
 
 export default CommmentDesign;

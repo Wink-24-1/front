@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import LinkImg from "../images/Home.svg";
 import InputComment from "../components/InputComment";
+import noneImg from "../images/noneImg.svg";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Comments from "../components/Comments";
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -29,8 +31,10 @@ const DetailPage = () => {
     <DetailContainer>
       <DetailHeader text="클래식 연주회" />
       <DetailWrapper>
-        <DetailImg src={data.image ? data.image : "대체이미지"} />
-        <LinkButton href={data.url ? data.url : "대체url"}>
+        {/* 가오부리기 좋음ㅋ */}
+        <DetailImg src={data?.image || noneImg} />
+        <LinkButton href={data?.url || "#"}>
+
           <LinkButtonText>예약 및 상세정보</LinkButtonText>
           <img src={LinkImg} alt="상세정보 링크 연결 버튼" />
         </LinkButton>
@@ -41,15 +45,20 @@ const DetailPage = () => {
             console.log(data);
           }}
         >
-          {data.title}
+          {data?.title || "You can't find it"}
         </LinkButtonText>
-        시작일 : {data.start} <br />
-        마감일 : {data.end} <br />
-        장소 : {data.place} <br />
-        가격 : {data.price ? data.price : "무료"} <br />
-        대상 : {data.target}
+        시작일 :{" "}
+        {data?.start ? data.start.substring(0, 10) : "You can't find it"}
+        <br />
+        마감일 : {data?.end
+          ? data.end.substring(0, 10)
+          : "You can't find it"}{" "}
+        <br />
+        장소 : {data?.place || "You can't find it"} <br />
+        가격 : {data?.price ? data.price : "무료"} <br />
+        대상 : {data?.target || "You can't find it"}
       </DetailInfo>
-      <InputComment />
+      <Comments />
     </DetailContainer>
   );
 };
