@@ -25,7 +25,7 @@ function DetailComponent({ recommendData }) {
           </Link>
           <div className="text-sm">
             {recommendData.start
-              ? `${recommendData.start} ~ ${recommendData.end}`
+              ? `${recommendData.start.substring(0,10)} ~ ${recommendData.end.substring(0, 10)}`
               : "잠시만 기다려주세요"}
           </div>
           <div className="text-sm">

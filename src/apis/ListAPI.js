@@ -46,5 +46,5 @@ export async function getContentsSortByComments(data, focus) {
 export default {
   getList,
   getContentsList,
-  getContentsSortByComments
+  getContentsSortByComments,
 };

@@ -7,12 +7,12 @@ import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
 import CategoryListPage from "./pages/CategoryListPage";
-// import ChatBot from "./components/ChatBot";
+import ChatBot from "./components/ChatBot";
 function App() {
   return (
     <div className="w-96 m-auto border pb-3">
       <Header />
-      {/* <ChatBot /> */}
+      <ChatBot />
 
       <Routes>
         <Route path="/" element={<MainPage />} />

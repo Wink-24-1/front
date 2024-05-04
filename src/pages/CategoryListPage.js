@@ -23,12 +23,24 @@ function CategoryListPage() {
 
   async function axiosGetDataList(변수1) {
     try {
-      if (변수1 == 0) {
+      if (변수1 === 0) {
         //뒤로가기
         navigate("/list");
-      } else if (변수1 == 1) {
+      } else if (변수1 === 1) {
         //댓글순
-      } else if (변수1 == 2) {
+        let copy = [...categoryDataList];
+        let filteredCopy = copy.filter((data) => data.price === null);
+        filteredCopy.sort((a, b) => {
+          if (a.comment < b.comment) {
+            return -1;
+          }
+          if (a.comment > b.comment) {
+            return 1;
+          }
+          return 0;
+        });
+        setDisplayData(filteredCopy.slice(0, endIndex));
+      } else if (변수1 === 2) {
         //무료
         let copy = [...categoryDataList];
         let filteredCopy = copy.filter((data) => data.price === null);

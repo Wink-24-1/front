@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import getParking, { getMAPLocation } from "../apis/MapAPI";
 import Loading from "./Loading";
-import ListAPI from "../apis/ListAPI";
 
 const { kakao } = window;
 
-function ContentsMap({ setRecommendData, contentGPS }) {
+function ContentsMap({ setRecommendData, contentGPS, setWeatherGPS }) {
   let [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -16,6 +15,7 @@ function ContentsMap({ setRecommendData, contentGPS }) {
           contentGPS={contentGPS}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          setWeatherGPS={setWeatherGPS}
         />
       </div>
     </div>
@@ -23,7 +23,7 @@ function ContentsMap({ setRecommendData, contentGPS }) {
 }
 
 //모바일로 접속 시 따로 설정해줘야되나봄~ 아직 안함
-function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
+function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading, setWeatherGPS }) {
   let [centerGPS, setCenterGPS] = useState({
     latitude: 37.6100021,
     longitude: 126.9971053,
@@ -34,6 +34,10 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
       latitude: lat,
       longitude: lng,
     }));
+    setWeatherGPS({
+      latitude: lat,
+      longitude: lng,
+    });
   }
 
   function printPins(map) {

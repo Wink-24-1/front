@@ -11,9 +11,16 @@ import getParking from "../apis/MapAPI";
 function MainPage({ contents }) {
   let dispatch = useDispatch();
   let [recommendData, setRecommendData] = useState();
+
   let [mainCategory, setMainCategory] = useState([]);
   let [nowCategory, setNowCategory] = useState();
   let [isLoading, setIsLoading] = useState(false);
+  let [selectedCategory, setSelectedCategory] = useState('');
+
+  let [weatherGPS, setWeatherGPS] = useState({
+    latitude: 37.6100021,
+    longitude: 126.9971053,
+  });
 
   let [contentGPS, setContentGPS] = useState([
     {
@@ -79,12 +86,12 @@ function MainPage({ contents }) {
 
   return (
     <div className="HomePage">
-      <Weather />
+      <Weather recommendData={recommendData} weatherGPS={weatherGPS} />
       <div className="flex flex-row text-center py-4 overflow-x-auto">
         {mainCategory?.map((data, i) => {
           return (
             <div
-              className="inline-block flex-shrink-0 border rounded-xl h-7 min-w-20 bg-main-color px-2 mx-2 text-sm place-content-center cursor-pointer"
+              className={`inline-block flex-shrink-0 border rounded-xl h-7 min-w-20 bg-main-color px-2 mx-2 text-sm place-content-center cursor-pointer ${selectedCategory === data ? 'border-black border-2 shadow-md' : ''}`}
               onClick={() => {
                 if (data === 주차장 || data === 유흥거리) {
                   setNowCategory(data);
@@ -92,6 +99,7 @@ function MainPage({ contents }) {
                 } else if (data === "⬅️") {
                   setMainCategory(StartCategory);
                 } else {
+                  setSelectedCategory(data)
                   axiosGetContentsGPS(data, i);
                 }
               }}
@@ -101,13 +109,14 @@ function MainPage({ contents }) {
           );
         })}
       </div>
-      <div className="px-3">
+      <div className="px-3 z-0">
         {nowCategory === 주차장 ? (
           <Map
             contentGPS={contentGPS}
             setRecommendData={setRecommendData}
             mainCategory={mainCategory}
             setMainCategory={setMainCategory}
+            setWeatherGPS={setWeatherGPS}
           />
         ) : (
           <ContentsMap
@@ -115,6 +124,7 @@ function MainPage({ contents }) {
             setRecommendData={setRecommendData}
             mainCategory={mainCategory}
             setMainCategory={setMainCategory}
+            setWeatherGPS={setWeatherGPS}
           />
         )}
         {recommendData && <DetailComponent recommendData={recommendData} />}
