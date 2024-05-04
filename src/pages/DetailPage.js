@@ -45,8 +45,13 @@ const DetailPage = () => {
         >
           {data?.title || "You can't find it"}
         </LinkButtonText>
-        시작일 : {data?.start || "You can't find it"} <br />
-        마감일 : {data?.end || "You can't find it"} <br />
+        시작일 :{" "}
+        {data?.start ? data.start.substring(0, 10) : "You can't find it"}
+        <br />
+        마감일 : {data?.end
+          ? data.end.substring(0, 10)
+          : "You can't find it"}{" "}
+        <br />
         장소 : {data?.place || "You can't find it"} <br />
         가격 : {data?.price ? data.price : "무료"} <br />
         대상 : {data?.target || "You can't find it"}

@@ -3,20 +3,54 @@ import styled from "styled-components";
 import Trash from "../images/delete.svg";
 import Modify from "../images/modify.svg";
 import Like from "../images/LikeButton.svg";
-import axios from "axios";
 import DeleteModal from "../components/PwModal";
 
 const CommmentDesign = ({ commentId, username, comment, date }) => {
-  const [pw, setPw] = useState("1111");
+  const [pw, setPw] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState(null);
+  const [editValue, setEditValue] = useState("");
   const onChangePwInput = (e) => {
     setPw(e.target.value);
   };
-  const handleDeleteClick = () => {
-    setShowModal(true); // 모달 보이도록 설정
+  const onChangeEditValue = (e) => {
+    setEditValue(e.target.value);
   };
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditButtonClick = () => {
+    setIsEditing(true); // 수정 모드로 전환
+  };
+
+  const handleConfirmEdit = () => {
+    // 수정한 내용을 서버에 전송하는 등의 작업 수행
+    handleClick(0);
+    setIsEditing(false); // 수정 모드 종료
+  };
+
+  const editInput = (
+    <div>
+      <input
+        type="text"
+        value={editValue}
+        onChange={onChangeEditValue}
+        style={{
+          border: "0.5px solid",
+        }}
+      />
+      <button
+        onClick={handleConfirmEdit}
+        style={{
+          border: "0.5px solid",
+        }}
+      >
+        확인
+      </button>
+    </div>
+  );
+  const handleClick = (state) => {
+    setShowModal(true); // 모달 보이도록 설정
+    setModalState(state);
   };
   console.log("username : ", username);
   console.log("comment : ", comment);
@@ -32,26 +66,28 @@ const CommmentDesign = ({ commentId, username, comment, date }) => {
           {/*사용자 날짜 띄우기 */}
           <DateText>{date}</DateText>
         </RowContainer>
-        {comment}
+        {isEditing ? editInput : comment}
         <RowContainer>
           <ClickButton
             onChange={onChangePwInput}
-            onClick={handleDeleteClick}
-            // onClick={() => DeleteData(id)}
+            onClick={() => handleClick(1)}
           >
             <img src={Trash} />
             <Text>삭제</Text>
-            {/* 수정 가능한 input 창 표시 & 선택된 댓글의 인덱스 설정 */}
-            {/* <ClickButton onClick={handleClick}>
+          </ClickButton>
+          {/* 수정 가능한 input 창 표시 & 선택된 댓글의 인덱스 설정 */}
+          {/* <ClickButton onClick={() => handleClick(0)}> */}
+          <ClickButton onClick={handleEditButtonClick}>
             <img src={Modify} />
-        <Text>수정</Text> */}
+            <Text>수정</Text>
           </ClickButton>
         </RowContainer>
       </CommentContainer>
       <ModalContainer>
         {showModal && (
           <DeleteModal
-            state={1}
+            editValue={editValue}
+            state={modalState}
             commentId={commentId}
             setShowModal={setShowModal} // 모달 닫기 함수 전달
           />
@@ -112,7 +148,7 @@ const ClickButton = styled.div`
   cursor: pointer;
 `;
 const ModalContainer = styled.div`
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

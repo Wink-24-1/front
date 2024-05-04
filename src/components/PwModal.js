@@ -1,11 +1,16 @@
 import { useState } from "react";
-import PWCheckAPI from "../apis/CommentAPI";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { AxiosError } from "axios";
 
-function PwModal({ state, commentId, setShowModal }) {
+function PwModal({ state, commentId, setShowModal, editValue }) {
   const [password, setPassword] = useState("");
   const { id } = useParams();
+  const content = editValue;
+  const data = {
+    password: password, // 비밀번호
+    content: content, // 사용자가 수정한 내용
+  };
   const handleChange = (e) => {
     setPassword(e.target.value);
   };
@@ -18,6 +23,25 @@ function PwModal({ state, commentId, setShowModal }) {
     window.location.reload();
     console.log(response.data);
     return response.data;
+  }
+
+  async function UpdateData() {
+    try {
+      const response = await axios.patch(
+        `https://seoulmate.kookm.in/api/event/${id}/comment/${commentId}`,
+        data
+      );
+      window.location.reload();
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      //수혁이가 해줌 짱 멋있다! 욕설 댓글 입력하면 error 띄우기
+      if (error instanceof AxiosError) {
+        alert(error.response?.data);
+      } else {
+        alert("Error!", error);
+      }
+    }
   }
 
   return (
@@ -35,9 +59,9 @@ function PwModal({ state, commentId, setShowModal }) {
       <div>
         <button
           className="border rounded w-14 p-1 mr-4 bg-main-color text-sm"
-          onClick={() => DeleteData()}
+          onClick={() => (state === 1 ? DeleteData() : UpdateData())}
         >
-          확인
+          {state === 1 ? "삭제" : "수정"}
         </button>
         <button
           className="border rounded w-14 p-1 text-sm"
