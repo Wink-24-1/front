@@ -10,6 +10,7 @@ import Comments from "../components/Comments";
 
 const DetailPage = () => {
   const { id } = useParams();
+
   async function getData() {
     const response = await axios.get(
       `https://seoulmate.kookm.in/api/event/${id}`
@@ -33,6 +34,7 @@ const DetailPage = () => {
         {/* 가오부리기 좋음ㅋ */}
         <DetailImg src={data?.image || noneImg} />
         <LinkButton href={data?.url || "#"}>
+
           <LinkButtonText>예약 및 상세정보</LinkButtonText>
           <img src={LinkImg} alt="상세정보 링크 연결 버튼" />
         </LinkButton>

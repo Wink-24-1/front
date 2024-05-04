@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import getParking, { getMAPLocation } from "../apis/MapAPI";
 import Loading from "./Loading";
-import ListAPI from "../apis/ListAPI";
 
 const { kakao } = window;
 
-function ContentsMap({ setRecommendData, contentGPS }) {
+function ContentsMap({ setRecommendData, contentGPS, setWeatherGPS }) {
   let [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -16,6 +15,7 @@ function ContentsMap({ setRecommendData, contentGPS }) {
           contentGPS={contentGPS}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          setWeatherGPS={setWeatherGPS}
         />
       </div>
     </div>
@@ -23,7 +23,7 @@ function ContentsMap({ setRecommendData, contentGPS }) {
 }
 
 //모바일로 접속 시 따로 설정해줘야되나봄~ 아직 안함
-function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
+function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading, setWeatherGPS }) {
   let [centerGPS, setCenterGPS] = useState({
     latitude: 37.6100021,
     longitude: 126.9971053,
@@ -34,6 +34,10 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
       latitude: lat,
       longitude: lng,
     }));
+    setWeatherGPS({
+      latitude: lat,
+      longitude: lng,
+    });
   }
 
   function printPins(map) {
@@ -43,12 +47,7 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
         //마커가 표시 될 지도
         map: map,
         //마커가 표시 될 위치
-        //❗️❗️❗️❗️❗️❗️❗️
-        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-        //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-        //나중에 수정해주면 바꾸기❗️❗️❗️❗️
-        position: new kakao.maps.LatLng(data.longitude, data.latitude),
+        position: new kakao.maps.LatLng(data.latitude, data.longitude),
         //마커에 hover시 나타날 title
         title: data.title,
       });
@@ -98,12 +97,7 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
         place: data.place,
         url: data.url,
       }));
-      //❗️❗️❗️❗️❗️❗️❗️
-      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-      //❗️❗️❗️❗️❗️❗️❗️ 지금은 위도 경도가 반대로 들어가있음 ❗️❗️❗️❗️❗️❗️❗️
-      //나중에 수정해주면 바꾸기❗️❗️❗️❗️
-      changeCenterGPS(data.longitude, data.latitude);
+      changeCenterGPS(data.latitude, data.longitude);
     }
   }
   useEffect(() => {

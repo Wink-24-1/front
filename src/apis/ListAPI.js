@@ -29,7 +29,22 @@ export async function getContentsList(data) {
   }
 }
 
+export async function getContentsSortByComments(data, focus) {
+  try {
+    console.log(data);
+    const response = await axios.get(
+      `${REACT_APP_MAIN_URL}/api/event/category/${data}/:focus`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("List data에서 문제가 생겼습니다 - " + error);
+  }
+}
+
 export default {
   getList,
   getContentsList,
+  getContentsSortByComments,
 };

@@ -30,37 +30,6 @@ function getBaseTime() {
   return `${hours.toString().padStart(2, "0")}${minutes}`;
 }
 
-function getClosestFcstTime(data) {
-  const currentTime = getBaseTime();
-  let closestTimeDiff = Infinity;
-  let closestFcstTime = null;
-
-  data.forEach((item) => {
-    const timeDiff = Math.abs(Number(item.fcstTime) - Number(currentTime));
-    if (timeDiff < closestTimeDiff) {
-      closestTimeDiff = timeDiff;
-      closestFcstTime = item.fcstTime;
-    }
-  });
-
-  return closestFcstTime;
-}
-
-function getLocation() {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      function (pos) {
-        const latitude = parseInt(pos.coords.latitude);
-        const longitude = parseInt(pos.coords.longitude);
-        resolve({ latitude, longitude });
-      },
-      function (error) {
-        reject(error);
-      }
-    );
-  });
-}
-
 // 사용할 카테고리 리스트
 const usedCategories = ["PTY", "SKY", "T1H"]; // 여기에 사용할 카테고리를 추가하십시오.
 
@@ -70,7 +39,7 @@ const categoryData = {
   SKY: [],
   T1H: [],
 };
-async function getWeather() {
+async function getWeather2(latitude, longitude) {
   const returnData = {
     PTY: [],
     SKY: [],
@@ -79,7 +48,7 @@ async function getWeather() {
   try {
     const date = getDate();
     const time = getBaseTime();
-    const { latitude, longitude } = await getLocation();
+    console.log(latitude, longitude);
 
     const response = await axios.get(
       `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
@@ -115,11 +84,10 @@ async function getWeather() {
     returnData.T1H = categoryData.T1H[0];
 
     return returnData;
-
   } catch (error) {
     console.error(error);
     throw new Error("Weather data에서 문제가 생겼습니다");
   }
 }
 
-export { getWeather };
+export { getWeather2 };
