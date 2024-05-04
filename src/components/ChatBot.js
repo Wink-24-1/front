@@ -8,7 +8,7 @@ function ChatBot() {
   let [chatBot, setChatBot] = useState(false);
 
   return (
-    <div className="w-8 fixed bottom-1 left-96 z-50">
+    <div className="w-12 h-12 absolute flex bottom-1 z-50 bg-white justify-center items-center rounded-full">
       <FontAwesomeIcon
         icon={faHeadset}
         size="2xl"
@@ -20,7 +20,13 @@ function ChatBot() {
 }
 
 function ChatApp({ setChatBot }) {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      content:
+        "안녕하세요~! Seoul Mate의 인공지능 챗봇입니다. 무엇을 도와드릴까요?",
+      role: "bot",
+    },
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [inputDisabled, setInputDisabled] = useState(false);
 
@@ -33,6 +39,7 @@ function ChatApp({ setChatBot }) {
     try {
       setInputDisabled(true);
       let data = await getChatBot(msgs);
+      console.log(data);
       setMessages([...msgs, data]);
     } finally {
       setInputDisabled(false);
@@ -49,7 +56,7 @@ function ChatApp({ setChatBot }) {
       <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div className="flex flex-col bg-white p-4 rounded-lg w-96 min-h-96">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">챗봇</h2>
+            <h2 className="text-lg font-semibold">Chat Bot</h2>
             <button
               onClick={closeModal}
               className="text-gray-500 hover:text-gray-700"
@@ -57,7 +64,7 @@ function ChatApp({ setChatBot }) {
               <FontAwesomeIcon className="h-5 w-5" icon={faX} />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 p-4 overflow-y-auto">
+          <div className="flex-1 bg-gray-100 p-4 overflow-y-auto max-h-96">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -67,7 +74,11 @@ function ChatApp({ setChatBot }) {
               >
                 <div
                   style={{ whiteSpace: "pre-line" }}
-                  className="bg-blue-500 text-white rounded-lg p-2 inline-block mb-2"
+                  className={`bg-blue-500 text-white rounded-lg p-2 inline-block mb-2 ${
+                    message.role === "user"
+                      ? "text-right"
+                      : "text-left bg-gray-300 text-black"
+                  }`}
                 >
                   {message.content}
                 </div>
@@ -90,8 +101,11 @@ function ChatApp({ setChatBot }) {
               disabled={inputDisabled}
             />
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2"
+              className={`${
+                inputDisabled ? "bg-gray-300" : "bg-blue-500"
+              } text-white px-4 py-2 rounded-lg ml-2`}
               onClick={sendMessage}
+              // {inputDisabled ? disabled : 'bg-gray-300'}}
             >
               <FontAwesomeIcon icon={faPaperPlane} />
             </button>

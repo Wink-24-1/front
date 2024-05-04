@@ -10,7 +10,7 @@ import CategoryListPage from "./pages/CategoryListPage";
 import ChatBot from "./components/ChatBot";
 function App() {
   return (
-    <div className="w-96 m-auto border pb-3">
+    <div className="w-96 m-auto border pb-3 min-h-screen">
       <Header />
       <ChatBot />
 
