@@ -30,21 +30,6 @@ function getBaseTime() {
   return `${hours.toString().padStart(2, "0")}${minutes}`;
 }
 
-function getLocation() {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      function (pos) {
-        const latitude = parseInt(pos.coords.latitude);
-        const longitude = parseInt(pos.coords.longitude);
-        resolve({ latitude, longitude });
-      },
-      function (error) {
-        reject(error);
-      }
-    );
-  });
-}
-
 // 사용할 카테고리 리스트
 const usedCategories = ["PTY", "SKY", "T1H"]; // 여기에 사용할 카테고리를 추가하십시오.
 
@@ -54,7 +39,7 @@ const categoryData = {
   SKY: [],
   T1H: [],
 };
-async function getWeather() {
+async function getWeather2(latitude, longitude) {
   const returnData = {
     PTY: [],
     SKY: [],
@@ -63,7 +48,7 @@ async function getWeather() {
   try {
     const date = getDate();
     const time = getBaseTime();
-    const { latitude, longitude } = await getLocation();
+    console.log(latitude, longitude);
 
     const response = await axios.get(
       `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`,
@@ -105,4 +90,4 @@ async function getWeather() {
   }
 }
 
-export { getWeather };
+export { getWeather2 };

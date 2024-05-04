@@ -4,7 +4,7 @@ import Loading from "./Loading";
 
 const { kakao } = window;
 
-function Map({ setRecommendData, contentGPS }) {
+function Map({ setRecommendData, contentGPS, setWeatherGPS }) {
   let [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -15,6 +15,7 @@ function Map({ setRecommendData, contentGPS }) {
           contentGPS={contentGPS}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
+          setWeatherGPS={setWeatherGPS}
         />
       </div>
     </div>
@@ -22,17 +23,28 @@ function Map({ setRecommendData, contentGPS }) {
 }
 
 //모바일로 접속 시 따로 설정해줘야되나봄~ 아직 안함
-function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
+function KakaoMap({
+  setRecommendData,
+  contentGPS,
+  isLoading,
+  setIsLoading,
+  setWeatherGPS,
+}) {
   let [centerGPS, setCenterGPS] = useState({
     latitude: 37.6100021,
     longitude: 126.9971053,
   });
+
   function changeCenterGPS(lat, lng) {
     setCenterGPS((prevState) => ({
       ...prevState,
       latitude: lat,
       longitude: lng,
     }));
+    setWeatherGPS({
+      latitude: lat,
+      longitude: lng,
+    });
   }
 
   function printParkingPins(map) {
@@ -111,9 +123,9 @@ function KakaoMap({ setRecommendData, contentGPS, isLoading, setIsLoading }) {
 
   return (
     <div>
-      <div className="relative" style={{ width: "360px", height: "320px" }}>
+      <div className="relative" style={{ width: "360px", height: "320px"}}>
         {isLoading && <Loading />}
-        <div id="map" className="w-full h-full"></div>
+        <div id="map" className="w-full h-full z-10"></div>
       </div>
     </div>
   );

@@ -4,11 +4,14 @@ import styled from "styled-components";
 import LinkImg from "../images/Home.svg";
 import InputComment from "../components/InputComment";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const DetailPage = () => {
+  const { id } = useParams();
+
   async function getData() {
     const response = await axios.get(
-      `https://seoulmate.kookm.in/api/event/140577`
+      `https://seoulmate.kookm.in/api/event/${id}`
     );
     setData(response.data);
     console.log(response.data);
@@ -26,8 +29,8 @@ const DetailPage = () => {
     <DetailContainer>
       <DetailHeader text="클래식 연주회" />
       <DetailWrapper>
-        <DetailImg src={data.image} />
-        <LinkButton href={data.url}>
+        <DetailImg src={data.image ? data.image : "대체이미지"} />
+        <LinkButton href={data.url ? data.url : "대체url"}>
           <LinkButtonText>예약 및 상세정보</LinkButtonText>
           <img src={LinkImg} alt="상세정보 링크 연결 버튼" />
         </LinkButton>
