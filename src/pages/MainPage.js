@@ -16,7 +16,6 @@ function MainPage({ contents }) {
   let [nowCategory, setNowCategory] = useState();
   let [isLoading, setIsLoading] = useState(false);
 
-
   //❓❓❓❓파라미터 사용한다 가정시
   const { category, id } = useParams();
 
