@@ -5,13 +5,7 @@ import Modify from "../images/modify.svg";
 import Like from "../images/LikeButton.svg";
 // import DeleteModal from "../components/PwModal";
 
-const CommmentDesign = ({
-  comment: { id, username, content, date },
-  isEditing,
-  setSelectedCommentIndex,
-  editComment,
-  deleteComment,
-}) => {
+const CommmentDesign = ({ id, username, comment, date }) => {
   const onChangeEditValue = (e) => {
     setEditValue(e.target.value);
   };
@@ -22,19 +16,19 @@ const CommmentDesign = ({
   };
   const onClickDeleteButton = () => {
     console.log("id : ", id);
-    deleteComment(id);
+    // deleteComment(id);
     setShowDeleteModal(true);
   };
-  const [editValue, setEditValue] = useState(content);
+  const [editValue, setEditValue] = useState(comment);
   const handleEditInput = () => {
-    editComment(id, editValue);
-    setSelectedCommentIndex(0); //선택된 댓글의 인덱스 초기화
+    // editComment(id, editValue);
+    // setSelectedCommentIndex(0); //선택된 댓글의 인덱스 초기화
   };
   const handleClick = () => {
-    if (isEditing) {
+    if (1) {
       handleEditInput();
     } else {
-      setSelectedCommentIndex(id);
+      // setSelectedCommentIndex(id);
     }
   };
   //수정 버튼 눌렀을 때 새로 수정할 내용 입력할 창이 뜨도록
@@ -43,9 +37,24 @@ const CommmentDesign = ({
   );
   console.log("id : ", id);
   console.log("username : ", username);
-  console.log("content : ", content);
+  console.log("comment : ", comment);
   console.log("date", date);
-  console.log("isEditing", isEditing);
+  // console.log("isEditing", isEditing);
+  //댓글 삭제
+  // const deleteComment = (id) => {
+  //   setCommentList(commentList.filter((comment) => comment.id !== id));
+  // };
+
+  // //댓글 수정
+  // const editComment = (commentId, editValue) => {
+  //   let newCommentList = commentList.map((item) => {
+  //     if (item.id === commentId) {
+  //       item.comment = editValue;
+  //     }
+  //     return item;
+  //   });
+  //   setCommentList(newCommentList);
+  // };
   return (
     <Container>
       <LikeButton />
@@ -56,8 +65,7 @@ const CommmentDesign = ({
           {/*사용자 날짜 띄우기 */}
           <DateText>{date}</DateText>
         </RowContainer>
-        {/*댓글 수정 중인지 파악해서 isEditing 값 true인지 false인지 정함 */}
-        {isEditing ? editInput : content}
+        {comment}
         <RowContainer>
           {/* {showDeleteModal && (
             <DeleteModal

@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import CommentButtonImg from "../images/CommentButton.svg";
-import CommentDesign from "./CommentDesign";
+import sendRequest from "../apis/CommentAPI";
 
-const InputComment = () => {
+const InputComment = ({ commentList, setCommentList }) => {
   const TodayDate = new Date();
-  const [selectedCommentIndex, setSelectedCommentIndex] = useState(0);
+  const { id } = useParams();
   const [nickname, setNickname] = useState("");
   const [pw, setPw] = useState("");
   const [comment, setComment] = useState("");
@@ -18,79 +19,33 @@ const InputComment = () => {
   const onChangeComment = (e) => {
     setComment(e.target.value);
   };
-  const [commentList, setCommentList] = useState([]);
-  //댓글 추가
-  const addComment = () => {
-    //이름, 비번, 내용 다 비어있지 않았을 때 실행 가능하도록
-    if (nickname !== "" && pw !== "" && comment !== "") {
-      if (commentList.length > 0) {
-        console.log("commentList : ", commentList);
-        const lastCmtIndex = commentList.length - 1;
-        const addedCmtId = commentList[lastCmtIndex].id + 1;
-        const newComment = {
-          id: addedCmtId,
-          username: nickname,
+
+  async function postCommentData() {
+    try {
+      const response = await sendRequest(
+        "POST",
+        `https://seoulmate.kookm.in/api/event/${id}/comment`,
+        {
+          name: nickname,
           password: pw,
           content: comment,
-          date: TodayDate.toLocaleDateString(),
-        };
-        setCommentList([...commentList, newComment]);
-      } else {
-        const newComment = {
-          id: 1,
-          username: nickname,
-          password: pw,
-          content: comment,
-          date: TodayDate.toLocaleDateString(),
-        };
-        setCommentList([newComment]);
-      }
-      setComment("");
-      setNickname("");
-      setPw("");
-    } else {
-      alert("댓글을 마저 작성해주세요");
+        }
+      ).then((response) => {
+        // 성공적으로 POST 요청이 완료되었을 때 페이지를 새로고침
+        window.location.reload();
+      });
+      return response;
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
-  };
+  }
+
   useEffect(() => {
-    console.log("commentList : ", commentList);
+    console.log(commentList);
   }, [commentList]);
-
-  //댓글 삭제
-  const deleteComment = (id) => {
-    setCommentList(commentList.filter((comment) => comment.id !== id));
-  };
-
-  //댓글 수정
-  const editComment = (commentId, editValue) => {
-    let newCommentList = commentList.map((item) => {
-      if (item.id === commentId) {
-        item.content = editValue;
-      }
-      return item;
-    });
-    setCommentList(newCommentList);
-  };
 
   return (
     <Container>
-      {commentList.map((comment) => {
-        const commentId = comment.id;
-        console.log("commentId : ", commentId);
-        console.log("typeof(commentId) : ", typeof commentId);
-        return (
-          <CommentDesign
-            id={comment.id}
-            username={nickname}
-            comment={comment}
-            date={TodayDate.toLocaleDateString()}
-            deleteComment={deleteComment}
-            isEditing={selectedCommentIndex === commentId ? true : false}
-            setSelectedCommentIndex={setSelectedCommentIndex}
-            editComment={editComment}
-          />
-        );
-      })}
       <UserInfoWrapper>
         <UserInfoInput
           value={nickname}
@@ -110,7 +65,12 @@ const InputComment = () => {
           onChange={onChangeComment}
           placeholder="댓글을 입력해주세요"
         />
-        <CommentButton onClick={addComment}>
+        <CommentButton
+          onClick={() => {
+            // addComment();
+            postCommentData();
+          }}
+        >
           <img src={CommentButtonImg} alt="댓글 버튼" />
         </CommentButton>
       </CommentInputWrapper>

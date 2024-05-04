@@ -5,13 +5,17 @@ const REACT_APP_MAIN_URL = process.env.REACT_APP_MAIN_URL;
 async function sendRequest(method, url, data) {
   try {
     let response;
+    console.log(method);
+    console.log(url);
+    console.log(data);
 
     if (method === "GET") {
       response = await axios.get(url, { params: data });
     } else if (method === "POST") {
       response = await axios.post(url, data);
-    } else if (method === "FETCH") {
-      response = await axios.fetch(url, data);
+      console.log(data);
+    } else if (method === "PATCH") {
+      response = await axios.patch(url, data);
     } else if (method === "DELETE") {
       response = await axios.delete(url, data);
     } else {
@@ -50,4 +54,4 @@ async function PWCheckAPI(state, commentID, password) {
   }
 }
 
-export default PWCheckAPI;
+export default sendRequest;

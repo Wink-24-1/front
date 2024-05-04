@@ -4,11 +4,14 @@ import styled from "styled-components";
 import LinkImg from "../images/Home.svg";
 import InputComment from "../components/InputComment";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import Comments from "../components/Comments";
 
 const DetailPage = () => {
+  const { id } = useParams();
   async function getData() {
     const response = await axios.get(
-      `https://seoulmate.kookm.in/api/event/140577`
+      `https://seoulmate.kookm.in/api/event/${id}`
     );
     setData(response.data);
     console.log(response.data);
@@ -46,7 +49,7 @@ const DetailPage = () => {
         가격 : {data.price ? data.price : "무료"} <br />
         대상 : {data.target}
       </DetailInfo>
-      <InputComment />
+      <Comments />
     </DetailContainer>
   );
 };

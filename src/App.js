@@ -20,7 +20,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
 
-        <Route path="/detail" element={<DetailPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
     </div>
   );
