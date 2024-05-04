@@ -2,6 +2,31 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { faHeadset, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { getChatBot } from "../apis/ChatBotAPI";
+
+function SmartSplit(str) {
+  let regex = /{([^\n}]+)}<(\d+)>/g;
+  let result = [];
+  let match;
+
+  // lastIndex를 추적하면서 모든 매치를 찾아 배열에 추가
+  while ((match = regex.exec(str)) !== null) {
+    result.push([match[1], match[2]]);
+    // 마지막 매치 이후의 문자열도 추가
+    if (regex.lastIndex !== str.length) {
+      let nextIndex = regex.lastIndex;
+      let nextMatch = regex.exec(str);
+      if (nextMatch) {
+        result.push(str.slice(nextIndex, nextMatch.index));
+        regex.lastIndex = nextMatch.index; // 다음 매치 위치로 인덱스 조정
+      } else {
+        result.push(str.slice(nextIndex)); // 마지막 텍스트 추가
+      }
+    }
+  }
+
+  return result;
+}
 
 function ChatBot() {
   let [chatBot, setChatBot] = useState(false);
@@ -21,11 +46,21 @@ function ChatBot() {
 function ChatApp({ setChatBot }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [inputDisabled, setInputDisabled] = useState(false);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputValue.trim() === "") return;
-    setMessages([...messages, { text: inputValue, sender: "user" }]);
+    let msgs = [...messages, { content: inputValue, role: "user" }];
+    setMessages(msgs);
     setInputValue("");
+
+    try {
+      setInputDisabled(true);
+      let data = await getChatBot(msgs);
+      setMessages([...msgs, data]);
+    } finally {
+      setInputDisabled(false);
+    }
   };
 
   const closeModal = () => {
@@ -51,11 +86,14 @@ function ChatApp({ setChatBot }) {
               <div
                 key={index}
                 className={`message ${
-                  message.sender === "user" ? "text-right" : "text-left"
+                  message.role === "user" ? "text-right" : "text-left"
                 }`}
               >
-                <div className="bg-blue-500 text-white rounded-lg p-2 inline-block mb-2">
-                  {message.text}
+                <div
+                  style={{ whiteSpace: "pre-line" }}
+                  className="bg-blue-500 text-white rounded-lg p-2 inline-block mb-2"
+                >
+                  {message.content}
                 </div>
               </div>
             ))}
@@ -73,6 +111,7 @@ function ChatApp({ setChatBot }) {
                   sendMessage();
                 }
               }}
+              disabled={inputDisabled}
             />
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-lg ml-2"
