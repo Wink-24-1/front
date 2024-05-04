@@ -38,7 +38,7 @@ function DetailComponent({ recommendData }) {
         to={`${recommendData.category}/${recommendData.id}`}
         target="_blank"
       >
-        {'상세정보 보기'}
+        {"상세정보 보기"}
       </Link>
     </div>
   );
