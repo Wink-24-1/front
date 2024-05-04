@@ -1,9 +1,10 @@
 import DetailHeader from "../components/DetailHeader";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ClassicImg from "../images/Image.svg";
 import LinkImg from "../images/Home.svg";
 import InputComment from "../components/InputComment";
+import axios from "axios";
 
 const DetailPage = () => {
   const [img, setImg] = useState(ClassicImg);
@@ -11,34 +12,47 @@ const DetailPage = () => {
   const [link, setLink] = useState(
     "https://illustrationkorea.co.kr/at/media/ill-gallery/"
   );
-  const onClickButton = () => {
-    window.location.href = link;
-  };
 
-  const [title, setTitle] = useState("클래식 연주회");
-  const [startDate, setStartDate] = useState("2024.04.30");
-  const [endDate, setEndDate] = useState("2024.04.31");
-  const [place, setPlace] = useState("국민대 예술관 3층");
-  const [price, setPrice] = useState("무료");
-  const [target, setTarget] = useState("청소년만");
+  async function getData() {
+    const response = await axios.get(
+      `https://seoulmate.kookm.in/api/event/140577`
+    );
+    setData(response.data);
+    console.log(response.data);
+    return response.data;
+  }
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    getData();
+    setLink(data.url);
+    console.log(data);
+  }, []);
 
   return (
     <DetailContainer>
       <DetailHeader text="클래식 연주회" />
       <DetailWrapper>
-        <DetailImg src={img} />
-        <LinkButton onClick={onClickButton}>
+        <DetailImg src={data.image} />
+        <LinkButton href={data.url}>
           <LinkButtonText>예약 및 상세정보</LinkButtonText>
           <img src={LinkImg} alt="상세정보 링크 연결 버튼" />
         </LinkButton>
       </DetailWrapper>
       <DetailInfo>
-        <LinkButtonText>{title}</LinkButtonText>
-        시작일 : {startDate} <br />
-        마감일 : {endDate} <br />
-        장소 : {place} <br />
-        가격 : {price} <br />
-        대상 : {target}
+        <LinkButtonText
+          onClick={() => {
+            console.log(data);
+          }}
+        >
+          {data.title}
+        </LinkButtonText>
+        시작일 : {data.start} <br />
+        마감일 : {data.end} <br />
+        장소 : {data.place} <br />
+        가격 : {data.price ? data.price : "무료입니다"} <br />
+        대상 : {data.target}
       </DetailInfo>
       <InputComment />
     </DetailContainer>
@@ -63,7 +77,7 @@ const DetailImg = styled.img`
   border-radius: 16px;
 `;
 
-const LinkButton = styled.button`
+const LinkButton = styled.a`
   background-color: #fbe6e6;
   width: 150px;
   border-radius: 16px;

@@ -7,10 +7,9 @@ import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
 // import ChatBot from "./components/ChatBot";
-
 function App() {
   return (
-    <div className="w-96 h-svh m-auto border">
+    <div className="w-96 m-auto border pb-3">
       <Header />
       {/* <ChatBot /> */}
 

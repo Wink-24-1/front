@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Trash from "../images/delete.svg";
 import Modify from "../images/modify.svg";
 import Like from "../images/LikeButton.svg";
+// import DeleteModal from "../components/PwModal";
 
 const CommmentDesign = ({
   comment: { id, username, content, date },
@@ -11,8 +12,18 @@ const CommmentDesign = ({
   editComment,
   deleteComment,
 }) => {
-  const onChangeNickname = (e) => {
+  const onChangeEditValue = (e) => {
     setEditValue(e.target.value);
+  };
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const onCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+  const onClickDeleteButton = () => {
+    console.log("id : ", id);
+    deleteComment(id);
+    setShowDeleteModal(true);
   };
   const [editValue, setEditValue] = useState(content);
   const handleEditInput = () => {
@@ -28,33 +39,35 @@ const CommmentDesign = ({
   };
   //수정 버튼 눌렀을 때 새로 수정할 내용 입력할 창이 뜨도록
   const editInput = (
-    <input type="text" value={editValue} onChange={onChangeNickname} /> //JSX 요소 담고 있는 변수
+    <input type="text" value={editValue} onChange={onChangeEditValue} /> //JSX 요소 담고 있는 변수
   );
   console.log("id : ", id);
   console.log("username : ", username);
   console.log("content : ", content);
   console.log("date", date);
   console.log("isEditing", isEditing);
-  const onClickDeleteButton = () => {
-    console.log("id : ", id);
-    deleteComment(id);
-  };
   return (
     <Container>
       <LikeButton />
       <CommentContainer>
         <RowContainer>
           {/*사용자 닉네임 띄우기 */}
-          <Nickname value={editValue} onChange={onChangeNickname}>
-            {username}
-          </Nickname>
+          <Nickname>{username}</Nickname>
           {/*사용자 날짜 띄우기 */}
           <DateText>{date}</DateText>
         </RowContainer>
         {/*댓글 수정 중인지 파악해서 isEditing 값 true인지 false인지 정함 */}
         {isEditing ? editInput : content}
         <RowContainer>
+          {/* {showDeleteModal && (
+            <DeleteModal
+              state={1}
+              commentID={id}
+              onClose={onCloseDeleteModal}
+            />
+          )} */}
           <ClickButton onClick={() => onClickDeleteButton(id)}>
+            {/* <ClickButton onClick={onClickDeleteButton}> */}
             <img src={Trash} />
             <Text>삭제</Text>
           </ClickButton>

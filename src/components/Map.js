@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 const { kakao } = window;
 function Map() {
   let [recommend, setRecommend] = useState([
-    "농장",
-    "교육",
-    "산림여가",
-    "전시/관람",
+    "🚘 주차장",
+    "🖼️ 전시회",
+    "⛰️ 산림여가",
+    "🎤 공연",
   ]);
 
   return (

@@ -80,7 +80,8 @@ const InputComment = () => {
         console.log("typeof(commentId) : ", typeof commentId);
         return (
           <CommentDesign
-            key={commentId}
+            id={comment.id}
+            username={nickname}
             comment={comment}
             date={TodayDate.toLocaleDateString()}
             deleteComment={deleteComment}

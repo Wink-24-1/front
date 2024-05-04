@@ -9,18 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Weather() {
-  let [weatherData, setWeatherData] = useState([
-    {
-      baseDate: "20240429",
-      baseTime: "1230",
-      category: "SKY",
-      fcstDate: "20240429",
-      fcstTime: "1300",
-      fcstValue: "1",
-      nx: 37,
-      ny: 126,
-    },
-  ]);
+  let [weatherData, setWeatherData] = useState({
+    PTY: "",
+    SKY: "",
+    T1H: { fcstValue: "00" },
+  });
 
   useEffect(() => {
     getWeather().then((data) => {
@@ -33,9 +26,9 @@ function Weather() {
       {weatherData ? (
         <div className="flex gap-5 justify-between">
           <div className="flex gap-3">
-            <div className="w-16 h-12 bg-main-color place-content-center text-5xl">
+            <div className="w-16 h-12 place-content-center text-5xl">
               {(() => {
-                switch (weatherData.fcstValue) {
+                switch (weatherData.SKY.fcstValue) {
                   case "1": //맑음
                     return <FontAwesomeIcon icon={faSun} />;
                   case "3": //구름많음
@@ -47,12 +40,14 @@ function Weather() {
                 }
               })()}
             </div>
-            <div className="font-bold text-xl place-content-center">123°C</div>
+            <div className="font-bold text-xl place-content-center">
+              {weatherData.T1H.fcstValue}°C
+            </div>
           </div>
           <div className="w-16 h-12 text-right font-semibold">
             <h2>
               {(() => {
-                switch (weatherData.fcstValue) {
+                switch (weatherData.SKY.fcstValue) {
                   case "1": //맑음
                     return "맑음";
                   case "3": //구름많음
@@ -64,7 +59,10 @@ function Weather() {
                 }
               })()}
             </h2>
-            <h2>{`${weatherData.fcstTime?.slice(0,2)}:${weatherData.fcstTime?.slice(2)}`}</h2>
+            <h2 className="truncate">{`${weatherData.SKY.fcstTime?.slice(
+              0,
+              2
+            )}:${weatherData.SKY.fcstTime?.slice(2)}`}</h2>
           </div>
         </div>
       ) : (
