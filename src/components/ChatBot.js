@@ -74,9 +74,9 @@ function ChatApp({ setChatBot }) {
               >
                 <div
                   style={{ whiteSpace: "pre-line" }}
-                  className={`bg-blue-500 text-white rounded-lg p-2 inline-block mb-2 ${
+                  className={`rounded-lg p-2 inline-block mb-2 ${
                     message.role === "user"
-                      ? "text-right"
+                      ? "text-right text-white bg-blue-500"
                       : "text-left bg-gray-300 text-black"
                   }`}
                 >
