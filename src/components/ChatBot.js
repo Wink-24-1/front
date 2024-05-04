@@ -4,30 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { getChatBot } from "../apis/ChatBotAPI";
 
-function SmartSplit(str) {
-  let regex = /{([^\n}]+)}<(\d+)>/g;
-  let result = [];
-  let match;
-
-  // lastIndex를 추적하면서 모든 매치를 찾아 배열에 추가
-  while ((match = regex.exec(str)) !== null) {
-    result.push([match[1], match[2]]);
-    // 마지막 매치 이후의 문자열도 추가
-    if (regex.lastIndex !== str.length) {
-      let nextIndex = regex.lastIndex;
-      let nextMatch = regex.exec(str);
-      if (nextMatch) {
-        result.push(str.slice(nextIndex, nextMatch.index));
-        regex.lastIndex = nextMatch.index; // 다음 매치 위치로 인덱스 조정
-      } else {
-        result.push(str.slice(nextIndex)); // 마지막 텍스트 추가
-      }
-    }
-  }
-
-  return result;
-}
-
 function ChatBot() {
   let [chatBot, setChatBot] = useState(false);
 
