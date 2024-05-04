@@ -5,7 +5,7 @@ const REACT_APP_MAIN_URL = process.env.REACT_APP_MAIN_URL;
 export async function getChatBot(msgs) {
   try {
     const response = await axios.post(`${REACT_APP_MAIN_URL}/api/chat`, {
-      messages: [msgs[1]],
+      messages: msgs.slice(1),
     });
     console.log(response.data);
     return response.data;
