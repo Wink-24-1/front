@@ -7,18 +7,13 @@ import { changeMenuToHome } from "../store/store";
 import ContentsMap from "../components/ContentsMap";
 import ListAPI from "../apis/ListAPI";
 import getParking from "../apis/MapAPI";
-import { useParams } from "react-router-dom";
 
 function MainPage({ contents }) {
   let dispatch = useDispatch();
   let [recommendData, setRecommendData] = useState();
-  let [mainCategory, setMainCategory] = useState(["🅿️ 주차장", "🎬 유흥거리?"]);
+  let [mainCategory, setMainCategory] = useState([]);
   let [nowCategory, setNowCategory] = useState();
   let [isLoading, setIsLoading] = useState(false);
-
-
-  //❓❓❓❓파라미터 사용한다 가정시
-  const { category, id } = useParams();
 
   let [contentGPS, setContentGPS] = useState([
     {
@@ -30,6 +25,10 @@ function MainPage({ contents }) {
       longitude: "126.9971053",
     },
   ]);
+  const 주차장 = "🅿️ 주차장";
+  const 유흥거리 = "🎬 문화생활";
+
+  const StartCategory = [주차장, 유흥거리];
   const ParkingCategory = [
     "🚘 시간제",
     "🚘 거주자",
@@ -42,10 +41,12 @@ function MainPage({ contents }) {
   const axiosGetCategory = async (categoryName) => {
     try {
       let result;
-      if (categoryName === "🅿️ 주차장") {
+      if (categoryName === 주차장) {
+        ParkingCategory.unshift("⬅️");
         result = ParkingCategory;
-      } else if (categoryName === "🎬 유흥거리?") {
+      } else if (categoryName === 유흥거리) {
         result = await ListAPI.getList();
+        result.unshift("⬅️");
       }
       setMainCategory(result);
       console.log(result);
@@ -58,9 +59,9 @@ function MainPage({ contents }) {
     try {
       let result;
       setIsLoading(true);
-      if (nowCategory === "🅿️ 주차장") {
+      if (nowCategory === 주차장) {
         result = (await getParking(i + 1)).data;
-      } else if (nowCategory === "🎬 유흥거리?") {
+      } else if (nowCategory === 유흥거리) {
         result = await ListAPI.getContentsList(mainCategoryName);
       }
       setIsLoading(false);
@@ -73,6 +74,7 @@ function MainPage({ contents }) {
 
   useEffect(() => {
     dispatch(changeMenuToHome());
+    setMainCategory(StartCategory);
   }, []);
 
   return (
@@ -84,9 +86,11 @@ function MainPage({ contents }) {
             <div
               className="inline-block flex-shrink-0 border rounded-xl h-7 min-w-20 bg-main-color px-2 mx-2 text-sm place-content-center cursor-pointer"
               onClick={() => {
-                if (data === "🅿️ 주차장" || data === "🎬 유흥거리?") {
+                if (data === 주차장 || data === 유흥거리) {
                   setNowCategory(data);
                   axiosGetCategory(data);
+                } else if (data === "⬅️") {
+                  setMainCategory(StartCategory);
                 } else {
                   axiosGetContentsGPS(data, i);
                 }
@@ -98,7 +102,7 @@ function MainPage({ contents }) {
         })}
       </div>
       <div className="px-3">
-        {nowCategory === "🅿️ 주차장" ? (
+        {nowCategory === 주차장 ? (
           <Map
             contentGPS={contentGPS}
             setRecommendData={setRecommendData}
@@ -113,9 +117,7 @@ function MainPage({ contents }) {
             setMainCategory={setMainCategory}
           />
         )}
-        {/* map에서 가져온 핀의 데이터를 */}
         {recommendData && <DetailComponent recommendData={recommendData} />}
-        {/* 여기다 집어넣으면 될듯? -> 그러려면 usestate 쓰면 될듯? */}
       </div>
     </div>
   );

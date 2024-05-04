@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 
 const REACT_APP_GET_WEATHER_KEY = process.env.REACT_APP_GET_WEATHER_KEY;
 

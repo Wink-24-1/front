@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage";
 import NotFound from "./pages/NotFound";
 import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
+import CategoryListPage from "./pages/CategoryListPage";
 // import ChatBot from "./components/ChatBot";
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/:category/:id" element={<MainPage />} />
         <Route path="/list" element={<ListPage />} />
+        <Route path="/list/:categoryName" element={<CategoryListPage />} />
+
+        <Route path="/detail/:id" element={<DetailPage />} />
 
         <Route path="*" element={<NotFound />} />
-
-        <Route path="/detail" element={<DetailPage />} />
       </Routes>
     </div>
   );
