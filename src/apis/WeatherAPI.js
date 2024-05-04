@@ -107,15 +107,14 @@ async function getWeather() {
       }
     });
 
-    console.log(categoryData.PTY[0]);
-    console.log(categoryData.SKY[0]);
-    console.log(categoryData.T1H[0]);
+    // console.log(categoryData.PTY[0]);
+    // console.log(categoryData.SKY[0]);
+    // console.log(categoryData.T1H[0]);
     returnData.PTY = categoryData.PTY[0];
     returnData.SKY = categoryData.SKY[0];
     returnData.T1H = categoryData.T1H[0];
 
     return returnData;
-
   } catch (error) {
     console.error(error);
     throw new Error("Weather data에서 문제가 생겼습니다");
